@@ -20,6 +20,7 @@ public class ProviderResource {
     private final ProviderService providerService;
     private final ProviderMapper providerMapper;
 
+
     @PostMapping
     public ResponseEntity<ProviderDTO> save(@RequestBody ProviderDTO provider){
         log.debug("REST request to save: {}", provider);
@@ -31,6 +32,7 @@ public class ProviderResource {
         log.debug("REST request to update: {}", provider);
         return providerService.update(provider, id);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getOneById(@PathVariable Long id){

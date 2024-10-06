@@ -1,4 +1,12 @@
 package ci.digitalacademy.com.service.dto;
 
-public class ProviderDTO {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class ProviderDTO extends PersonDTO{
+
+    private String slug;
+
 }

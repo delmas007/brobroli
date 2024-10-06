@@ -62,7 +62,6 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public ProviderDTO partialUpdate(ProviderDTO providerDTO, Long id) {
-
         return null;
     }
 }

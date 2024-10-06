@@ -22,6 +22,5 @@ public class ProviderMapperImp implements ProviderMapper {
     public Provider toEntity(ProviderDTO dto) {
         return modelMapper.map(dto, Provider.class);
 
-
     }
 }

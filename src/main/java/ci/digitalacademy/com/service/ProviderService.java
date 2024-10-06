@@ -18,5 +18,4 @@ public interface ProviderService {
     ProviderDTO update( ProviderDTO  providerDTO, Long id);
 
     ProviderDTO partialUpdate( ProviderDTO  providerDTO, Long id);
-
 }

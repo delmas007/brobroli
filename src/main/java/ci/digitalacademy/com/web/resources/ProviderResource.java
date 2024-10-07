@@ -2,7 +2,6 @@ package ci.digitalacademy.com.web.resources;
 
 import ci.digitalacademy.com.service.ProviderService;
 import ci.digitalacademy.com.service.dto.ProviderDTO;
-import ci.digitalacademy.com.service.mapper.ProviderMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,13 +17,13 @@ import java.util.List;
 public class ProviderResource {
 
     private final ProviderService providerService;
-    private final ProviderMapper providerMapper;
+
 
 
     @PostMapping
-    public ResponseEntity<ProviderDTO> save(@RequestBody ProviderDTO provider){
-        log.debug("REST request to save: {}", provider);
-        return new ResponseEntity<>(providerService.save(provider), HttpStatus.CREATED);
+    public ResponseEntity<ProviderDTO> saveProvider(@RequestBody ProviderDTO provider){
+        log.debug("REST request to save provider: {}", provider);
+        return new ResponseEntity<>(providerService.saveProvider(provider), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -34,16 +33,22 @@ public class ProviderResource {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<?> getOneById(@PathVariable Long id){
         log.debug("REST request to get one by id: {}", id);
         return new ResponseEntity<>(providerService.findOneById(id),HttpStatus.OK );
+    }
+
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<?> getOneBySlug(@PathVariable String slug){
+        log.debug("REST request to get one by slug: {}", slug);
+        return new ResponseEntity<>(providerService.findOneBySlug(slug),HttpStatus.OK );
     }
 
     @GetMapping
     public List<ProviderDTO> findAll(){
         log.debug("REST request to find all");
         return providerService.findAll();
-
     }
+
 }

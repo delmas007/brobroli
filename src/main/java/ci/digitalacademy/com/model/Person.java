@@ -21,7 +21,7 @@ public abstract class Person implements Serializable {
     private String urlProfil;
     private String email;
     private String city;
-    private int tel;
+    private String tel;
     private String street;
     private String biographie;
     private LocalDate createAt;

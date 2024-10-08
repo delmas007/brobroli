@@ -2,8 +2,10 @@ package ci.digitalacademy.com.service.imp;
 
 import ci.digitalacademy.com.model.Customer;
 import ci.digitalacademy.com.repository.CustomerRepository;
+import ci.digitalacademy.com.security.AuthorityConstants;
 import ci.digitalacademy.com.service.CustomerService;
 import ci.digitalacademy.com.service.dto.CustomerDTO;
+import ci.digitalacademy.com.service.dto.RoleDTO;
 import ci.digitalacademy.com.service.mapper.CustomerMapper;
 import ci.digitalacademy.com.utils.SlugifyUtils;
 import lombok.Getter;
@@ -33,6 +35,9 @@ public class CustomerServiceImp implements CustomerService {
     @Override
     public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         log.debug("Saving new customer: {}", customerDTO);
+        RoleDTO role2 = new RoleDTO();
+        role2.setRole(AuthorityConstants.PROVIDER);
+        customerDTO.getUser().setRole(role2);
         customerDTO.setCreateAt(LocalDate.now());
         customerDTO.setSlug(SlugifyUtils.generate(customerDTO.getFirstName()));
         Customer customer = customerMapper.toEntity(customerDTO);

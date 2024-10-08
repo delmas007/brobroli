@@ -1,4 +1,7 @@
 package ci.digitalacademy.com.service.mapper;
 
-public interface CustomerMapper {
+import ci.digitalacademy.com.model.Customer;
+import ci.digitalacademy.com.service.dto.CustomerDTO;
+
+public interface CustomerMapper extends EntityMapper<CustomerDTO, Customer> {
 }

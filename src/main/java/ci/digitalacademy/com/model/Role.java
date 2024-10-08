@@ -17,6 +17,6 @@ public class Role {
     @Id
     private String role;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
     private Set<User> user;
 }

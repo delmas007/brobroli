@@ -13,7 +13,7 @@ import java.util.List;
 @SpringBootApplication
 @RequiredArgsConstructor
 public class BrobroliApplication implements CommandLineRunner {
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
 
     public static void main(String[] args) {

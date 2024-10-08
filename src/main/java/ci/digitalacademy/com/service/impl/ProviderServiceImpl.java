@@ -7,6 +7,7 @@ import ci.digitalacademy.com.security.AuthorityConstants;
 import ci.digitalacademy.com.service.ProviderService;
 import ci.digitalacademy.com.service.dto.PersonDTO;
 import ci.digitalacademy.com.service.dto.ProviderDTO;
+import ci.digitalacademy.com.service.dto.RoleDTO;
 import ci.digitalacademy.com.service.mapper.ProviderMapper;
 import ci.digitalacademy.com.utils.SlugifyUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,8 +33,9 @@ public class ProviderServiceImpl implements ProviderService {
 
     @Override
     public ProviderDTO saveProvider(ProviderDTO providerDTO) {
-        Role role2 = new Role();
+        RoleDTO role2 = new RoleDTO();
         role2.setRole(AuthorityConstants.PROVIDER);
+        providerDTO.getUser().setRole(role2);
         providerDTO.setCreateAt(LocalDate.now());
         providerDTO.setSlug(SlugifyUtils.generate( providerDTO.getLastName()));
         Provider provider = providerMapper.toEntity( providerDTO);

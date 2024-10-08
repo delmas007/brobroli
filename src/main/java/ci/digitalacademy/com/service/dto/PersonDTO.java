@@ -37,5 +37,5 @@ public class PersonDTO {
 
     private UserDTO user;
 
-    private Balance balance;
+    private BalanceDTO balance;
 }

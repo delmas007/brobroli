@@ -1,7 +1,9 @@
 package ci.digitalacademy.com.web.resources;
 
+import ci.digitalacademy.com.service.BalanceService;
 import ci.digitalacademy.com.service.ProviderService;
 import ci.digitalacademy.com.service.SkillService;
+import ci.digitalacademy.com.service.dto.BalanceDTO;
 import ci.digitalacademy.com.service.dto.ProviderDTO;
 import ci.digitalacademy.com.service.dto.SkillDTO;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class ProviderResource {
 
     private final ProviderService providerService;
     private final SkillService skillService;
+    private final BalanceService balanceService;
 
 
 
@@ -70,6 +73,12 @@ public class ProviderResource {
     public SkillDTO updateSkill(@RequestBody SkillDTO skillDTO, @PathVariable Long id) {
         log.debug("REST request to update skill: {}", skillDTO);
         return skillService.update(skillDTO, id);
+    }
+
+    @PostMapping("/balance/{id}")
+    public ResponseEntity<BalanceDTO> saveBalance(@RequestBody BalanceDTO balanceDTO, @PathVariable Long id){
+        log.debug("REST request to save balance: {}", balanceDTO);
+        return new ResponseEntity<>(balanceService.save(balanceDTO,id), HttpStatus.CREATED);
     }
 
 }

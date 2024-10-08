@@ -1,7 +1,9 @@
 package ci.digitalacademy.com.web.resources;
 
 import ci.digitalacademy.com.service.ProviderService;
+import ci.digitalacademy.com.service.SkillService;
 import ci.digitalacademy.com.service.dto.ProviderDTO;
+import ci.digitalacademy.com.service.dto.SkillDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ProviderResource {
 
     private final ProviderService providerService;
+    private final SkillService skillService;
 
 
 
@@ -49,6 +52,24 @@ public class ProviderResource {
     public List<ProviderDTO> findAll(){
         log.debug("REST request to find all");
         return providerService.findAll();
+    }
+
+    @PostMapping("/skill")
+    public ResponseEntity<SkillDTO> savesSkill(@RequestBody SkillDTO skillDTO) {
+        log.debug("Rest request to save skill: {}", skillDTO);
+        return new ResponseEntity<>(skillService.saveskill(skillDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/skill/id/{id}")
+    public ResponseEntity<?> getSkillById(@PathVariable Long id) {
+        log.debug("REST request to get one by skill: {}", id);
+        return new ResponseEntity<>(skillService.findOneById(id),HttpStatus.OK);
+    }
+
+    @PutMapping("/skill/{id}")
+    public SkillDTO updateSkill(@RequestBody SkillDTO skillDTO, @PathVariable Long id) {
+        log.debug("REST request to update skill: {}", skillDTO);
+        return skillService.update(skillDTO, id);
     }
 
 }

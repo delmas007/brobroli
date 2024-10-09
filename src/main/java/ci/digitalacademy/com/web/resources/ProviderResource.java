@@ -2,9 +2,11 @@ package ci.digitalacademy.com.web.resources;
 
 import ci.digitalacademy.com.service.BalanceService;
 import ci.digitalacademy.com.service.ProviderService;
+import ci.digitalacademy.com.service.ServiceService;
 import ci.digitalacademy.com.service.SkillService;
 import ci.digitalacademy.com.service.dto.BalanceDTO;
 import ci.digitalacademy.com.service.dto.ProviderDTO;
+import ci.digitalacademy.com.service.dto.ServiceDTO;
 import ci.digitalacademy.com.service.dto.SkillDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class ProviderResource {
     private final ProviderService providerService;
     private final SkillService skillService;
     private final BalanceService balanceService;
+    private final ServiceService serviceService;
 
 
 
@@ -75,10 +78,35 @@ public class ProviderResource {
         return skillService.update(skillDTO, id);
     }
 
-    @PostMapping("/balance/{id}")
-    public ResponseEntity<BalanceDTO> saveBalance(@RequestBody BalanceDTO balanceDTO, @PathVariable Long id){
-        log.debug("REST request to save balance: {}", balanceDTO);
-        return new ResponseEntity<>(balanceService.save(balanceDTO,id), HttpStatus.CREATED);
+    @PostMapping("/service/{id}")
+    public ResponseEntity<ServiceDTO> savesService(@RequestBody ServiceDTO serviceDTO,@PathVariable Long id) {
+        log.debug("Rest request to save service: {}", serviceDTO);
+        return new ResponseEntity<>(serviceService.saveService(serviceDTO,id), HttpStatus.CREATED);
     }
+
+    @PutMapping("service/{id}")
+    public ServiceDTO updateService(@RequestBody ServiceDTO serviceDTO, @PathVariable Long id){
+        log.debug("REST request to update: {}", serviceDTO);
+        return serviceService.update(serviceDTO, id);
+    }
+
+    @GetMapping("/service/{id}")
+    public ResponseEntity<?> getServiceById(@PathVariable Long id) {
+        log.debug("REST request to get one by service: {}", id);
+        return new ResponseEntity<>(serviceService.findOneById(id),HttpStatus.OK);
+    }
+
+    @DeleteMapping("/service/{id}")
+    public void deleteServiceById(@PathVariable Long id) {
+        log.debug("REST request to delete one by service: {}", id);
+        serviceService.deleteById(id);
+    }
+
+    @GetMapping("/service")
+    public ResponseEntity<?> getServiceAll() {
+        return new ResponseEntity<>(serviceService.findAll(),HttpStatus.OK);
+    }
+
+
 
 }

@@ -12,7 +12,6 @@ import java.util.Set;
 @Builder
 @Entity
 public class Customer extends Person {
-    private String slug;
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "customer")
     private Set<Collaboration> collaboration;
 }

@@ -12,8 +12,6 @@ import java.util.Set;
 @Builder
 @Entity
 public class Provider extends Person {
-    private String slug;
-
     @OneToMany(mappedBy = "provider")
     private Set<Skills> skills;
 

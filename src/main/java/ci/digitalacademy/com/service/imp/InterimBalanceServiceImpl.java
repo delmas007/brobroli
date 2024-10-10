@@ -38,6 +38,7 @@ public class InterimBalanceServiceImpl implements InterimBalanceService {
     public InterimBalanceDTO saveInterimBalance(InterimBalanceDTO interimBalanceDTO) {
         log.debug("Saving new interim balance: {}", interimBalanceDTO);
         interimBalanceDTO.setSlug(SlugifyUtils.generate("azertmlkjh"));
+
         InterimBalance interimBalance = interimBalanceMapper.toEntity(interimBalanceDTO);
         interimBalance = interimBalanceRepository.save(interimBalance);
         return interimBalanceMapper.fromEntity(interimBalance);

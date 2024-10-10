@@ -60,10 +60,10 @@ public class ProviderResource {
         return providerService.findAll();
     }
 
-    @PostMapping("/skill")
-    public ResponseEntity<SkillDTO> savesSkill(@RequestBody SkillDTO skillDTO) {
+    @PostMapping("/skill/{id}")
+    public ResponseEntity<SkillDTO> savesSkill(@RequestBody SkillDTO skillDTO, @PathVariable Long id) {
         log.debug("Rest request to save skill: {}", skillDTO);
-        return new ResponseEntity<>(skillService.saveskill(skillDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(skillService.saveskill(skillDTO,id), HttpStatus.CREATED);
     }
 
     @GetMapping("/skill/id/{id}")
@@ -72,10 +72,22 @@ public class ProviderResource {
         return new ResponseEntity<>(skillService.findOneById(id),HttpStatus.OK);
     }
 
+    @GetMapping("/skills_provider/{id}")
+    public ResponseEntity<?> findAllByProviderId(@PathVariable Long id) {
+        log.debug("REST request to get all by provider_id: {}", id);
+        return new ResponseEntity<>(skillService.findAllByProviderId(id),HttpStatus.OK);
+    }
+
     @PutMapping("/skill/{id}")
     public SkillDTO updateSkill(@RequestBody SkillDTO skillDTO, @PathVariable Long id) {
         log.debug("REST request to update skill: {}", skillDTO);
         return skillService.update(skillDTO, id);
+    }
+
+    @DeleteMapping("/skill/{id}")
+    public void deleteskillById(@PathVariable Long id) {
+        log.debug("REST request to delete one by skill: {}", id);
+        skillService.deleteById(id);
     }
 
     @PostMapping("/service/{id}")

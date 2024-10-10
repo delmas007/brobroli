@@ -14,8 +14,8 @@ import java.util.Set;
 @Getter
 @Setter
 public class ProviderDTO extends PersonDTO{
-    private Set<Skills> skills;
+    private Set<SkillDTO> skills;
     private Set<AddInformation> addInformation;
     @JsonIgnore
-    private Set<Service> service;
+    private Set<ServiceDTO> service;
 }

@@ -2,7 +2,9 @@ package ci.digitalacademy.com.service.imp;
 
 import ci.digitalacademy.com.model.Skills;
 import ci.digitalacademy.com.repository.SkillRepository;
+import ci.digitalacademy.com.service.ProviderService;
 import ci.digitalacademy.com.service.SkillService;
+import ci.digitalacademy.com.service.dto.ProviderDTO;
 import ci.digitalacademy.com.service.dto.SkillDTO;
 import ci.digitalacademy.com.service.mapper.SkillMapper;
 import ci.digitalacademy.com.utils.SlugifyUtils;
@@ -10,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -19,6 +22,7 @@ public class SkillServiceImpl implements SkillService {
 
     private final SkillRepository skillRepository;
     private final SkillMapper skillMapper;
+    private final ProviderService providerService;
 
     @Override
     public SkillDTO save(SkillDTO skillDTO) {
@@ -29,7 +33,9 @@ public class SkillServiceImpl implements SkillService {
     }
 
     @Override
-    public SkillDTO saveskill(SkillDTO skillDTO) {
+    public SkillDTO saveskill(SkillDTO skillDTO,Long id) {
+        Optional<ProviderDTO> providerOp = providerService.findOneById(id);
+        skillDTO.setProvider(providerOp.get());
         final String slug = SlugifyUtils.generate(skillDTO.getSkillName());
         skillDTO.setSlug(slug);
         return save(skillDTO);
@@ -53,6 +59,16 @@ public class SkillServiceImpl implements SkillService {
             }
             return save(existingSkill);
         }).orElseThrow(()->new IllegalArgumentException());
+    }
+
+    @Override
+    public List<SkillDTO> findAllByProviderId(Long id) {
+        return skillRepository.findAllByProviderId(id).stream().map(skillMapper::fromEntity).toList();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        skillRepository.deleteById(id);
     }
 
     @Override

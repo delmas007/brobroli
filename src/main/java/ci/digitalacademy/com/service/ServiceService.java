@@ -1,5 +1,6 @@
 package ci.digitalacademy.com.service;
 
+import ci.digitalacademy.com.model.enume.TypeService;
 import ci.digitalacademy.com.service.dto.ServiceDTO;
 import ci.digitalacademy.com.service.dto.ServiceDTO;
 
@@ -21,4 +22,7 @@ public interface ServiceService {
     ServiceDTO update( ServiceDTO  serviceDTO, Long id);
 
     void deleteById(Long id);
+
+    List<ServiceDTO> searchServicesByTypeAndPriceRange(String typeService, Float minPrice, Float maxPrice);
+    List<ServiceDTO> searchServicesByType(String typeService);
 }

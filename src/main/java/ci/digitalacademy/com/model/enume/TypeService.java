@@ -7,6 +7,4 @@ public enum TypeService {
     MARKETING,
     FORMATION,
     PHOTOGRAPHIE,
-
-
 }

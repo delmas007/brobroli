@@ -20,7 +20,7 @@ public class Feedback {
     private String commentaire;
     private int rating;
     private LocalDate createAt;
-    private double updateAt;
+    private LocalDate updateAt;
     private String slug;
 
     @ManyToOne

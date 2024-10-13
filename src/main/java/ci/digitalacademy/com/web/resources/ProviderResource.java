@@ -1,19 +1,14 @@
 package ci.digitalacademy.com.web.resources;
 
-import ci.digitalacademy.com.service.BalanceService;
-import ci.digitalacademy.com.service.ProviderService;
-import ci.digitalacademy.com.service.ServiceService;
-import ci.digitalacademy.com.service.SkillService;
-import ci.digitalacademy.com.service.dto.BalanceDTO;
-import ci.digitalacademy.com.service.dto.ProviderDTO;
-import ci.digitalacademy.com.service.dto.ServiceDTO;
-import ci.digitalacademy.com.service.dto.SkillDTO;
+import ci.digitalacademy.com.service.*;
+import ci.digitalacademy.com.service.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -24,19 +19,26 @@ public class ProviderResource {
 
     private final ProviderService providerService;
     private final SkillService skillService;
-    private final BalanceService balanceService;
     private final ServiceService serviceService;
-
-
+    private final CollaborationService collaborationService;
+    private final AddInformationService addInformationService;
 
     @PostMapping
-    public ResponseEntity<ProviderDTO> saveProvider(@RequestBody ProviderDTO provider){
-        log.debug("REST request to save provider: {}", provider);
-        return new ResponseEntity<>(providerService.saveProvider(provider), HttpStatus.CREATED);
+    public ResponseEntity<ProviderDTO> saveProvider(@ModelAttribute FileProviderDTO fileProviderDTO) throws IOException {
+        log.debug("REST request to save provider: {}", fileProviderDTO);
+        return new ResponseEntity<>(providerService.saveProvider(fileProviderDTO), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/addInformation")
+    public ResponseEntity<AddInformationDTO> saveAddInformation(
+            @ModelAttribute FileAddInformationDTO fileAddInformationDTO) throws IOException {
+        log.debug("REST request to save AddInformation: {}", fileAddInformationDTO);
+        AddInformationDTO savedInformation = addInformationService.saveAddInformation(fileAddInformationDTO);
+        return new ResponseEntity<>(savedInformation, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ProviderDTO update(@RequestBody ProviderDTO provider, @PathVariable Long id){
+    public ProviderDTO update(@ModelAttribute FileProviderDTO provider, @PathVariable Long id) throws IOException {
         log.debug("REST request to update: {}", provider);
         return providerService.update(provider, id);
     }
@@ -119,6 +121,34 @@ public class ProviderResource {
         return new ResponseEntity<>(serviceService.findAll(),HttpStatus.OK);
     }
 
+    @PutMapping("/collaboration/accept/{id_collaboration}")
+    public void acceptCollaboration(@PathVariable long id_collaboration) {
+        log.debug("REST, Request to accept Collaboration : {}", id_collaboration);
+        collaborationService.accept(id_collaboration);
+    }
 
 
+    @PutMapping("/collaboration/reject/{id_collaboration}")
+    public void rejectCollaboration(@PathVariable long id_collaboration) {
+        log.debug("REST, Request to reject Collaboration : {}", id_collaboration);
+        collaborationService.reject(id_collaboration);
+    }
+
+    @PutMapping("/collaboration/terminer/{id_collaboration}")
+    public void completeCollaboration(@PathVariable long id_collaboration) {
+        log.debug("REST, Request to complete Collaboration : {}", id_collaboration);
+        collaborationService.CompleteProvider(id_collaboration);
+    }
+
+
+
+    @PutMapping("/addInformation/{id}")
+    public ResponseEntity<AddInformationDTO> updateAddInformation(
+            @PathVariable Long id,
+            @ModelAttribute FileAddInformationDTO fileAddInformationDTO) throws IOException {
+
+        AddInformationDTO updatedAddInformation = addInformationService.uploadAddInformationPicture(id, fileAddInformationDTO);
+
+        return ResponseEntity.ok(updatedAddInformation);
+    }
 }

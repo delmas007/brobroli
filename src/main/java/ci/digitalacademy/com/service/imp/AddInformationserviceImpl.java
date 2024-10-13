@@ -4,8 +4,10 @@ import ci.digitalacademy.com.model.AddInformation;
 import ci.digitalacademy.com.repository.AddInformationRepository;
 import ci.digitalacademy.com.service.AddInformationService;
 import ci.digitalacademy.com.service.FiltreStorageService;
+import ci.digitalacademy.com.service.ProviderService;
 import ci.digitalacademy.com.service.dto.AddInformationDTO;
 import ci.digitalacademy.com.service.dto.FileAddInformationDTO;
+import ci.digitalacademy.com.service.dto.ProviderDTO;
 import ci.digitalacademy.com.service.mapper.AddInformationMapper;
 import ci.digitalacademy.com.utils.SlugifyUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class AddInformationserviceImpl implements AddInformationService {
     private final AddInformationMapper addInformationMapper;
     private final AddInformationRepository addInformationRepository;
     private final FiltreStorageService filtreStorageService;
+    private final ProviderService providerService;
 
     @Override
     public AddInformationDTO save(AddInformationDTO addInformationDTO) {
@@ -37,19 +40,17 @@ public class AddInformationserviceImpl implements AddInformationService {
     @Override
     public AddInformationDTO saveAddInformation(FileAddInformationDTO fileAddInformationDTO) throws IOException {
         log.info("Saving AddInformation: {}", fileAddInformationDTO);
-
         final String slug = SlugifyUtils.generate(fileAddInformationDTO.getDescription());
         fileAddInformationDTO.setSlug(slug);
+        Optional<ProviderDTO> oneById = providerService.findOneById(fileAddInformationDTO.getProvider().getId());
 
         if (fileAddInformationDTO.getFileurlImage() != null && !fileAddInformationDTO.getFileurlImage().isEmpty()) {
             String imageUrl = filtreStorageService.upload(fileAddInformationDTO.getFileurlImage());
             fileAddInformationDTO.setUrlImage(imageUrl);
-        } else {
-            throw new IllegalArgumentException("Image file is required");
         }
+        fileAddInformationDTO.setProvider(oneById.get());
         AddInformation addInformation = addInformationMapper.toEntity(fileAddInformationDTO);
         AddInformation savedAddInformation = addInformationRepository.save(addInformation);
-
         return addInformationMapper.fromEntity(savedAddInformation);
     }
 
@@ -84,9 +85,6 @@ public class AddInformationserviceImpl implements AddInformationService {
 
         if (fileAddInformationDTO.getDescription() != null) {
             addInformation.setDescription(fileAddInformationDTO.getDescription());
-
-            final String slug = SlugifyUtils.generate(fileAddInformationDTO.getDescription());
-            addInformation.setSlug(slug);
         }
 
         if (fileAddInformationDTO.getFileurlImage() != null && !fileAddInformationDTO.getFileurlImage().isEmpty()) {
@@ -101,9 +99,7 @@ public class AddInformationserviceImpl implements AddInformationService {
         if (fileAddInformationDTO.getUrlCertificat() != null) {
             addInformation.setUrlCertificat(fileAddInformationDTO.getUrlCertificat());
         }
-        save(addInformation);
-
-        return addInformation;
+        return save(addInformation);
     }
 
     @Override

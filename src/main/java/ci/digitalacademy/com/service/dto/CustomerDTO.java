@@ -9,5 +9,5 @@ import java.util.Set;
 @Getter
 @Setter
 public class CustomerDTO extends PersonDTO{
-    private Set<Collaboration> collaboration;
+    private Set<CollaborationDTO> collaboration;
 }

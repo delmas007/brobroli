@@ -4,5 +4,6 @@ public enum CollaborationStatus {
     EN_ATTENTE,
     ACCEPTE,
     REFUSE,
-    ANNULER
+    ANNULER,
+    TERMINE
 }

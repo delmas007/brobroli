@@ -3,8 +3,9 @@ package ci.digitalacademy.com.service.imp;
 import ci.digitalacademy.com.model.Balance;
 import ci.digitalacademy.com.repository.BalanceRepository;
 import ci.digitalacademy.com.service.BalanceService;
-import ci.digitalacademy.com.service.ProviderService;
+import ci.digitalacademy.com.service.CustomerService;
 import ci.digitalacademy.com.service.dto.BalanceDTO;
+import ci.digitalacademy.com.service.dto.CustomerDTO;
 import ci.digitalacademy.com.service.dto.ProviderDTO;
 import ci.digitalacademy.com.service.mapper.BalanceMapper;
 import lombok.Getter;
@@ -21,20 +22,20 @@ import java.util.Optional;
 @Service
 public class BalanceServiceImp implements BalanceService {
     private final BalanceRepository balanceRepository;
-    private final ProviderService providerService;
+    private final CustomerService customerService;
     private final BalanceMapper balanceMapper;
     @Override
     public BalanceDTO save(BalanceDTO balanceDTO, Long id) {
-        Optional<ProviderDTO> providerDTO = providerService.findOneById(id);
-        if (providerDTO.isPresent()){
-            ProviderDTO provider = providerDTO.get();
-            if (provider.getBalance() == null){
+        Optional<CustomerDTO> customerDTO = customerService.findOneCustomer(id);
+        if (customerDTO.isPresent()){
+            CustomerDTO customer = customerDTO.get();
+            if (customer.getBalance() == null){
                 BalanceDTO balanceDTO1 = balanceMapper.fromEntity(balanceRepository.save(balanceMapper.toEntity(balanceDTO)));
-                provider.setBalance(balanceDTO1);
-                providerService.save(provider);
+                customer.setBalance(balanceDTO1);
+                customerService.save(customer);
                 return balanceDTO1;
             }else {
-                return update(balanceDTO,providerDTO.get());
+                return update(balanceDTO,customerDTO.get());
             }
         }else {
             return null;
@@ -42,9 +43,14 @@ public class BalanceServiceImp implements BalanceService {
     }
 
     @Override
-    public BalanceDTO update(BalanceDTO balanceDTO,ProviderDTO providerDTO) {
-        Float sum = providerDTO.getBalance().getSum();
-        BalanceDTO balance = providerDTO.getBalance();
+    public BalanceDTO save(BalanceDTO balanceDTO) {
+        return balanceMapper.fromEntity(balanceRepository.save(balanceMapper.toEntity(balanceDTO)));
+    }
+
+    @Override
+    public BalanceDTO update(BalanceDTO balanceDTO,CustomerDTO customerDTO) {
+        Float sum = customerDTO.getBalance().getSum();
+        BalanceDTO balance = customerDTO.getBalance();
         balance.setSum(sum + balanceDTO.getSum());
         return balanceMapper.fromEntity(balanceRepository.save(balanceMapper.toEntity(balance)));
     }

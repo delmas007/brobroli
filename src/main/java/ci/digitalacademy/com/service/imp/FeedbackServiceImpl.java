@@ -41,7 +41,7 @@ private final FeedbackMapper feedbackMapper;
     @Override
     public FeedbackDTO update(FeedbackDTO feedbackDTO) {
         return findOneById(feedbackDTO.getId()).map(existingFeedback ->{
-//            existingFeedback.setUpdateAt(LocalDate.now());
+            existingFeedback.setUpdateAt(LocalDate.now());
             if (feedbackDTO.getCommentaire() != null){
                 existingFeedback.setCommentaire(feedbackDTO.getCommentaire());
             }

@@ -14,8 +14,8 @@ public class FeedbackDTO {
     private String commentaire;
     private int rating;
     private LocalDate createAt;
-    private double updateAt;
+    private LocalDate updateAt;
     private String slug;
 
-    private Collaboration collaboration;
+    private CollaborationDTO collaboration;
 }

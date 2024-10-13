@@ -30,6 +30,6 @@ public abstract class Person implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Balance balance;
 }

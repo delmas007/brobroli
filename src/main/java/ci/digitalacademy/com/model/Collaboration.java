@@ -1,6 +1,8 @@
 package ci.digitalacademy.com.model;
 
 import ci.digitalacademy.com.model.enume.CollaborationStatus;
+import ci.digitalacademy.com.model.enume.CustomerStatusService;
+import ci.digitalacademy.com.model.enume.ProviderStatusService;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -22,6 +24,10 @@ public class Collaboration {
     private CollaborationStatus status;
     private LocalDate createAt;
     private LocalDate updateAt;
+    @Enumerated(value= EnumType.STRING)
+    private CustomerStatusService customerStatusService;
+    @Enumerated(value= EnumType.STRING)
+    private ProviderStatusService providerStatusService;
 
     @OneToOne
     private Service service;

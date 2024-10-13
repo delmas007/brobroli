@@ -1,5 +1,6 @@
 package ci.digitalacademy.com.service.imp;
 
+import ci.digitalacademy.com.model.enume.TypeService;
 import ci.digitalacademy.com.repository.ServiceRepository;
 import ci.digitalacademy.com.service.ProviderService;
 import ci.digitalacademy.com.service.ServiceService;
@@ -90,5 +91,21 @@ public class ServiceServiceImp implements ServiceService {
     @Override
     public void deleteById(Long id) {
         serviceRepository.deleteById(id);
+    }
+
+    @Override
+    public List<ServiceDTO> searchServicesByTypeAndPriceRange(String typeService, Float minPrice, Float maxPrice) {
+        TypeService typeService1 = TypeService.valueOf(typeService);
+        return serviceRepository.findByTypeServiceAndPriceBetween(typeService1, minPrice, maxPrice).stream().map(service -> {
+            return serviceMapper.fromEntity(service);
+        }).toList();
+    }
+
+    @Override
+    public List<ServiceDTO> searchServicesByType(String typeService) {
+        TypeService typeService1 = TypeService.valueOf(typeService);
+        return serviceRepository.findByTypeService(typeService1).stream().map(service -> {
+            return serviceMapper.fromEntity(service);
+        }).toList();
     }
 }

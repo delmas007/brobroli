@@ -24,9 +24,7 @@ public class AddInformationRessource {
     public ResponseEntity<AddInformationDTO> saveAddInformation(
             @ModelAttribute FileAddInformationDTO fileAddInformationDTO) throws IOException {
         log.debug("REST request to save AddInformation: {}", fileAddInformationDTO);
-
         AddInformationDTO savedInformation = addInformationService.saveAddInformation(fileAddInformationDTO);
-
         return new ResponseEntity<>(savedInformation, HttpStatus.CREATED);
     }
 

@@ -4,7 +4,9 @@ import ci.digitalacademy.com.model.Customer;
 import ci.digitalacademy.com.repository.CustomerRepository;
 import ci.digitalacademy.com.security.AuthorityConstants;
 import ci.digitalacademy.com.service.CustomerService;
+import ci.digitalacademy.com.service.FiltreStorageService;
 import ci.digitalacademy.com.service.dto.CustomerDTO;
+import ci.digitalacademy.com.service.dto.FileCustomerDTO;
 import ci.digitalacademy.com.service.dto.RoleDTO;
 import ci.digitalacademy.com.service.mapper.CustomerMapper;
 import ci.digitalacademy.com.utils.SlugifyUtils;
@@ -12,8 +14,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -30,16 +34,25 @@ public class CustomerServiceImp implements CustomerService {
     private final CustomerRepository repository;
     private final CustomerMapper customerMapper;
     private final CustomerRepository customerRepository;
+    private final FiltreStorageService filtreStorageService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     @Override
-    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO saveCustomer(FileCustomerDTO customerDTO) throws IOException {
         log.debug("Saving new customer: {}", customerDTO);
         RoleDTO role2 = new RoleDTO();
-        role2.setRole(AuthorityConstants.PROVIDER);
-        customerDTO.getUser().setRole(role2);
+        role2.setRole(AuthorityConstants.CUSTOMER);
+        if (customerDTO.getUser() != null){
+            customerDTO.getUser().setRole(role2);
+            customerDTO.getUser().setPassword(bCryptPasswordEncoder.encode(customerDTO.getUser().getPassword()));
+        }
         customerDTO.setCreateAt(LocalDate.now());
         customerDTO.setSlug(SlugifyUtils.generate(customerDTO.getFirstName()));
+        if (customerDTO.getFileurlImage() != null && !customerDTO.getFileurlImage().isEmpty()) {
+            String imageUrl = filtreStorageService.upload(customerDTO.getFileurlImage());
+            customerDTO.setUrlProfil(imageUrl);
+        }
         Customer customer = customerMapper.toEntity(customerDTO);
         customer = repository.save(customer);
         return customerMapper.fromEntity(customer);
@@ -62,7 +75,7 @@ public class CustomerServiceImp implements CustomerService {
     }
 
     @Override
-    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomer(FileCustomerDTO customerDTO)  {
         log.debug("Updating customer: {}", customerDTO);
         return findOneCustomer(customerDTO.getId()).map(existingCustumer ->{
             if (customerDTO.getBalance() != null){
@@ -99,12 +112,22 @@ public class CustomerServiceImp implements CustomerService {
                 existingCustumer.setTel(customerDTO.getTel());
             }
 
+            if (customerDTO.getFileurlImage() != null && !customerDTO.getFileurlImage().isEmpty()) {
+                String urlImage = null;
+                try {
+                    urlImage = filtreStorageService.upload(customerDTO.getFileurlImage());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                customerDTO.setUrlProfil(urlImage);
+            }
+
             return save(existingCustumer);
         }).orElse(null);
     }
 
     @Override
-    public CustomerDTO updateCustomer(Long id, CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomer(Long id, FileCustomerDTO customerDTO) throws IOException {
         log.debug("Updating customer: {}", id, customerDTO);
         customerDTO.setId(id);
         return updateCustomer(customerDTO);

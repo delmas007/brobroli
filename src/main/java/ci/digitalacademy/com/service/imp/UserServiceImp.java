@@ -60,4 +60,11 @@ public class UserServiceImp implements UserService {
             return userMapper.fromEntity(user);
         });
     }
+
+    @Override
+    public UserDTO getByUserName(String userName) {
+        return userRepository.findByUserName(userName).map(user -> {
+            return userMapper.fromEntity(user);
+        }).orElse(null);
+    }
 }

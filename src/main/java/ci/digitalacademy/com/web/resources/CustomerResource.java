@@ -67,6 +67,11 @@ public class CustomerResource {
            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }
    }
+    @GetMapping("/userId/{id}")
+    public ResponseEntity<?> getByUserId(@PathVariable Long id){
+        log.debug("REST request to get one by id: {}", id);
+        return new ResponseEntity<>(customerService.findByUserId(id),HttpStatus.OK );
+    }
 
    @GetMapping("/slug/{slug}")
    public ResponseEntity<?> getCustomerBySlug(@PathVariable String slug) {

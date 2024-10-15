@@ -6,10 +6,7 @@ import ci.digitalacademy.com.repository.ProviderRepository;
 import ci.digitalacademy.com.security.AuthorityConstants;
 import ci.digitalacademy.com.service.FiltreStorageService;
 import ci.digitalacademy.com.service.ProviderService;
-import ci.digitalacademy.com.service.dto.FileProviderDTO;
-import ci.digitalacademy.com.service.dto.PersonDTO;
-import ci.digitalacademy.com.service.dto.ProviderDTO;
-import ci.digitalacademy.com.service.dto.RoleDTO;
+import ci.digitalacademy.com.service.dto.*;
 import ci.digitalacademy.com.service.mapper.ProviderMapper;
 import ci.digitalacademy.com.utils.SlugifyUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,19 +35,22 @@ public class ProviderServiceImp implements ProviderService {
 
 
     @Override
-    public ProviderDTO saveProvider(FileProviderDTO fileProviderDTO) throws IOException {
+    public ProviderDTO saveProvider(ProviderDTO fileProviderDTO) throws IOException {
         RoleDTO role2 = new RoleDTO();
+        BalanceDTO balanceDTO = new BalanceDTO();
+        balanceDTO.setSum(0f);
         role2.setRole(AuthorityConstants.PROVIDER);
         if (fileProviderDTO.getUser() != null){
             fileProviderDTO.getUser().setRole(role2);
             fileProviderDTO.getUser().setPassword(bCryptPasswordEncoder.encode(fileProviderDTO.getUser().getPassword()));
         }
+        fileProviderDTO.setBalance(balanceDTO);
         fileProviderDTO.setCreateAt(LocalDate.now());
         fileProviderDTO.setSlug(SlugifyUtils.generate( fileProviderDTO.getLastName()));
-        if (fileProviderDTO.getFileurlImage() != null && !fileProviderDTO.getFileurlImage().isEmpty()) {
-            String imageUrl = filtreStorageService.upload(fileProviderDTO.getFileurlImage());
-            fileProviderDTO.setUrlProfil(imageUrl);
-        }
+//        if (fileProviderDTO.getFileurlImage() != null && !fileProviderDTO.getFileurlImage().isEmpty()) {
+//            String imageUrl = filtreStorageService.upload(fileProviderDTO.getFileurlImage());
+//            fileProviderDTO.setUrlProfil(imageUrl);
+//        }
         Provider provider = providerMapper.toEntity(fileProviderDTO);
         return providerMapper.fromEntity(providerRepository.save(provider));
     }
@@ -66,53 +66,13 @@ public class ProviderServiceImp implements ProviderService {
     public ProviderDTO update(FileProviderDTO providerDTO)  {
         return findOneById(providerDTO.getId()).map(existingProvider ->{
             existingProvider.setUpdateAt(LocalDate.now());
-            if (providerDTO.getBalance() != null){
-                existingProvider.setBalance(providerDTO.getBalance());
-            }
-            if (providerDTO.getBiographie() != null){
-                existingProvider.setBiographie(providerDTO.getBiographie());
-            }
-            if (providerDTO.getEmail() != null){
-                existingProvider.setEmail(providerDTO.getEmail());
-            }
-            if (providerDTO.getFileurlImage() != null && !providerDTO.getFileurlImage().isEmpty()) {
-                String urlImage = null;
-                try {
-                    urlImage = filtreStorageService.upload(providerDTO.getFileurlImage());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-                providerDTO.setUrlProfil(urlImage);
-            }
-            if (providerDTO.getFirstName() != null){
-                existingProvider.setFirstName(providerDTO.getFirstName());
-            }
-            if (providerDTO.getLastName() != null){
-                existingProvider.setLastName(providerDTO.getLastName());
-            }
-            if (providerDTO.getCity() != null){
-                existingProvider.setCity(providerDTO.getCity());
-            }
-            if (providerDTO.getStreet() != null){
-                existingProvider.setStreet(providerDTO.getStreet());
-            }
-
-            if (providerDTO.getUrlProfil() != null){
-                existingProvider.setUrlProfil(providerDTO.getUrlProfil());
-            }
-
-            if (providerDTO.getSlug() != null){
-                existingProvider.setSlug(providerDTO.getSlug());
-            }
-
-            if (providerDTO.getTel() != null){
-                existingProvider.setTel(providerDTO.getTel());
-            }
-
-            return save(existingProvider);
+            ProviderDTO existingProvider1 = extracted(providerDTO, existingProvider);
+            return save(existingProvider1);
         }).orElse(null);
 
     }
+
+
 
     @Override
     public Optional<ProviderDTO> findOneById(Long id) {
@@ -120,6 +80,13 @@ public class ProviderServiceImp implements ProviderService {
             return providerMapper.fromEntity(provider);
         });
 
+    }
+
+    @Override
+    public Optional<ProviderDTO> findByUserId(Long id) {
+        return providerRepository.findProviderByUserId(id).map(provider ->{
+            return providerMapper.fromEntity(provider);
+        });
     }
 
     @Override
@@ -141,6 +108,52 @@ public class ProviderServiceImp implements ProviderService {
         providerDTO.setId(id);
         return update(providerDTO);
 
+    }
+
+    private ProviderDTO extracted(FileProviderDTO providerDTO, ProviderDTO existingProvider) {
+        if (providerDTO.getBalance() != null){
+            existingProvider.setBalance(providerDTO.getBalance());
+        }
+        if (providerDTO.getBiographie() != null){
+            existingProvider.setBiographie(providerDTO.getBiographie());
+        }
+        if (providerDTO.getEmail() != null){
+            existingProvider.setEmail(providerDTO.getEmail());
+        }
+        if (providerDTO.getFileurlImage() != null && !providerDTO.getFileurlImage().isEmpty()) {
+            String urlImage = null;
+            try {
+                urlImage = filtreStorageService.upload(providerDTO.getFileurlImage());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            providerDTO.setUrlProfil(urlImage);
+        }
+        if (providerDTO.getFirstName() != null){
+            existingProvider.setFirstName(providerDTO.getFirstName());
+        }
+        if (providerDTO.getLastName() != null){
+            existingProvider.setLastName(providerDTO.getLastName());
+        }
+        if (providerDTO.getCity() != null){
+            existingProvider.setCity(providerDTO.getCity());
+        }
+        if (providerDTO.getStreet() != null){
+            existingProvider.setStreet(providerDTO.getStreet());
+        }
+
+        if (providerDTO.getUrlProfil() != null){
+            existingProvider.setUrlProfil(providerDTO.getUrlProfil());
+        }
+
+        if (providerDTO.getSlug() != null){
+            existingProvider.setSlug(providerDTO.getSlug());
+        }
+
+        if (providerDTO.getTel() != null){
+            existingProvider.setTel(providerDTO.getTel());
+        }
+        return existingProvider;
     }
 
 }

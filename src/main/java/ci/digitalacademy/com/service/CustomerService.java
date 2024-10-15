@@ -10,7 +10,7 @@ import java.util.Optional;
 @Service
 public interface CustomerService {
     //Enregitrer un client
-    CustomerDTO saveCustomer(FileCustomerDTO customerDTO) throws IOException;
+    CustomerDTO saveCustomer(CustomerDTO customerDTO) throws IOException;
 
     CustomerDTO save(CustomerDTO customerDTO);
 
@@ -24,6 +24,7 @@ public interface CustomerService {
 
     // Recherche d'un client par son ID
     Optional<CustomerDTO> findOneCustomer(Long id);
+    Optional<CustomerDTO> findByUserId(Long id);
 
     // Recherche d'un client par son slug
     Optional<CustomerDTO> getCustomerBySlug(String slug);

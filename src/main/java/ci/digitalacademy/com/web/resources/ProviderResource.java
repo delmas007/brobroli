@@ -22,6 +22,7 @@ public class ProviderResource {
     private final ServiceService serviceService;
     private final CollaborationService collaborationService;
     private final AddInformationService addInformationService;
+    private final BalanceService balanceService;
 
     @PostMapping
     public ResponseEntity<ProviderDTO> saveProvider(@ModelAttribute FileProviderDTO fileProviderDTO) throws IOException {
@@ -48,6 +49,11 @@ public class ProviderResource {
     public ResponseEntity<?> getOneById(@PathVariable Long id){
         log.debug("REST request to get one by id: {}", id);
         return new ResponseEntity<>(providerService.findOneById(id),HttpStatus.OK );
+    }
+    @GetMapping("/userId/{id}")
+    public ResponseEntity<?> getByUserId(@PathVariable Long id){
+        log.debug("REST request to get one by id: {}", id);
+        return new ResponseEntity<>(providerService.findByUserId(id),HttpStatus.OK );
     }
 
     @GetMapping("/slug/{slug}")
@@ -150,5 +156,10 @@ public class ProviderResource {
         AddInformationDTO updatedAddInformation = addInformationService.uploadAddInformationPicture(id, fileAddInformationDTO);
 
         return ResponseEntity.ok(updatedAddInformation);
+    }
+
+    @PutMapping("/retrait/{sum}/{id}")
+    public void updateBalance(@PathVariable Float sum,@PathVariable Long id){
+        balanceService.retrait(id, sum);
     }
 }

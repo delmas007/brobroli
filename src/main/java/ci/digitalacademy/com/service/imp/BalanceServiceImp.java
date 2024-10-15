@@ -4,6 +4,7 @@ import ci.digitalacademy.com.model.Balance;
 import ci.digitalacademy.com.repository.BalanceRepository;
 import ci.digitalacademy.com.service.BalanceService;
 import ci.digitalacademy.com.service.CustomerService;
+import ci.digitalacademy.com.service.ProviderService;
 import ci.digitalacademy.com.service.dto.BalanceDTO;
 import ci.digitalacademy.com.service.dto.CustomerDTO;
 import ci.digitalacademy.com.service.dto.ProviderDTO;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class BalanceServiceImp implements BalanceService {
     private final BalanceRepository balanceRepository;
     private final CustomerService customerService;
+    private final ProviderService providerService;
     private final BalanceMapper balanceMapper;
     @Override
     public BalanceDTO save(BalanceDTO balanceDTO, Long id) {
@@ -75,5 +77,17 @@ public class BalanceServiceImp implements BalanceService {
     @Override
     public Optional<BalanceDTO> getBySlug(String slug) {
         return Optional.empty();
+    }
+
+    @Override
+    public void retrait(Long id, Float sum) {
+        Optional<ProviderDTO> providerDTO = providerService.findOneById(id);
+        if (providerDTO.isPresent()){
+            ProviderDTO provider = providerDTO.get();
+            if (provider.getBalance()!= null && provider.getBalance().getSum() >=sum){
+                provider.getBalance().setSum(provider.getBalance().getSum()-sum);
+                providerService.save(provider);
+            }
+        }
     }
 }

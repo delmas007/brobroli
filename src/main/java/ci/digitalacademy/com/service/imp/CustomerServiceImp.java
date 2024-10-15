@@ -39,7 +39,7 @@ public class CustomerServiceImp implements CustomerService {
 
 
     @Override
-    public CustomerDTO saveCustomer(FileCustomerDTO customerDTO) throws IOException {
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) throws IOException {
         log.debug("Saving new customer: {}", customerDTO);
         RoleDTO role2 = new RoleDTO();
         role2.setRole(AuthorityConstants.CUSTOMER);
@@ -49,10 +49,10 @@ public class CustomerServiceImp implements CustomerService {
         }
         customerDTO.setCreateAt(LocalDate.now());
         customerDTO.setSlug(SlugifyUtils.generate(customerDTO.getFirstName()));
-        if (customerDTO.getFileurlImage() != null && !customerDTO.getFileurlImage().isEmpty()) {
-            String imageUrl = filtreStorageService.upload(customerDTO.getFileurlImage());
-            customerDTO.setUrlProfil(imageUrl);
-        }
+//        if (customerDTO.getFileurlImage() != null && !customerDTO.getFileurlImage().isEmpty()) {
+//            String imageUrl = filtreStorageService.upload(customerDTO.getFileurlImage());
+//            customerDTO.setUrlProfil(imageUrl);
+//        }
         Customer customer = customerMapper.toEntity(customerDTO);
         customer = repository.save(customer);
         return customerMapper.fromEntity(customer);
@@ -137,6 +137,12 @@ public class CustomerServiceImp implements CustomerService {
     public Optional<CustomerDTO> findOneCustomer(Long id) {
         log.debug("Requesting customer: {}", id);
         return customerRepository.findById(id).map(customer ->
+                customerMapper.fromEntity(customer));
+    }
+
+    @Override
+    public Optional<CustomerDTO> findByUserId(Long id) {
+        return customerRepository.findCustomerByUserId(id).map(customer ->
                 customerMapper.fromEntity(customer));
     }
 

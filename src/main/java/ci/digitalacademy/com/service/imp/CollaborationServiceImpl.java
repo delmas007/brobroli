@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -118,11 +119,11 @@ public class CollaborationServiceImpl implements CollaborationService {
             CollaborationDTO collaborationDTO = collaboration.get();
             collaborationDTO.setProviderStatusService(ProviderStatusService.TERMINE);
             if (collaborationDTO.getCustomerStatusService()== CustomerStatusService.TERMINE){
-                collaborationDTO.setStatus(CollaborationStatus.TERMINE);
                 Float newSum = collaborationDTO.getService().getProvider().getBalance().getSum()
-                        + (collaborationDTO.getInterimBalance().getSum() * 0.95f);
+                        + (collaborationDTO.getInterimBalance().getSum() * 0.97f);
                 collaborationDTO.getService().getProvider().getBalance().setSum(newSum);
                 balanceService.save(collaborationDTO.getService().getProvider().getBalance());
+                collaborationDTO.setStatus(CollaborationStatus.TERMINE);
             }
             save(collaborationDTO);
             notificationMailService.sendNotificationMailCollaborationTerminerProvider(collaborationDTO);
@@ -138,13 +139,27 @@ public class CollaborationServiceImpl implements CollaborationService {
             if (collaborationDTO.getProviderStatusService()== ProviderStatusService.TERMINE){
                 collaborationDTO.setStatus(CollaborationStatus.TERMINE);
                 Float newSum = collaborationDTO.getService().getProvider().getBalance().getSum()
-                        + (collaborationDTO.getInterimBalance().getSum() * 0.95f);
+                        + (collaborationDTO.getInterimBalance().getSum() * 0.97f);
                 collaborationDTO.getService().getProvider().getBalance().setSum(newSum);
                 balanceService.save(collaborationDTO.getService().getProvider().getBalance());
             }
             save(collaborationDTO);
             notificationMailService.sendNotificationMailCollaborationTerminerCustomer(collaborationDTO);
         }
+    }
+
+    @Override
+    public List<CollaborationDTO> findAllByProvider(Long id_provider) {
+        return List.of();
+    }
+
+    public List<CollaborationDTO> getCollaborationsByProviderId(Long providerId) {
+        return collaborationRepository.findAllByProviderId(providerId).stream().map(collaborationMapper::fromEntity).toList();
+    }
+
+    @Override
+    public List<CollaborationDTO> getCollaborationsBycustomerId(Long id_customer) {
+        return collaborationRepository.findAllByCustomerId(id_customer).stream().map(collaborationMapper::fromEntity).toList();
     }
 
 

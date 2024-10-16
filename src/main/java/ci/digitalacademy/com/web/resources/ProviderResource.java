@@ -159,7 +159,13 @@ public class ProviderResource {
     }
 
     @PutMapping("/retrait/{sum}/{id}")
-    public void updateBalance(@PathVariable Float sum,@PathVariable Long id){
-        balanceService.retrait(id, sum);
+    public Integer updateBalance(@PathVariable Float sum,@PathVariable Long id){
+        return balanceService.retrait(id, sum);
+    }
+
+    @GetMapping("/collaboration/provider/{id_provider}")
+    public List<CollaborationDTO> findAllByProvider(@PathVariable Long id_provider){
+        log.debug("REST request to find all by provider_id: {}", id_provider);
+        return collaborationService.getCollaborationsByProviderId(id_provider);
     }
 }

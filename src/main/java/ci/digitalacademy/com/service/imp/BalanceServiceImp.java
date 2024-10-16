@@ -80,14 +80,17 @@ public class BalanceServiceImp implements BalanceService {
     }
 
     @Override
-    public void retrait(Long id, Float sum) {
+    public Integer retrait(Long id, Float sum) {
         Optional<ProviderDTO> providerDTO = providerService.findOneById(id);
         if (providerDTO.isPresent()){
             ProviderDTO provider = providerDTO.get();
             if (provider.getBalance()!= null && provider.getBalance().getSum() >=sum){
                 provider.getBalance().setSum(provider.getBalance().getSum()-sum);
                 providerService.save(provider);
+                return 1;
             }
+            return 0;
         }
+        return 3;
     }
 }

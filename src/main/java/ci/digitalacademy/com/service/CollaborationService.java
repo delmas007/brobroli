@@ -2,6 +2,7 @@ package ci.digitalacademy.com.service;
 
 import ci.digitalacademy.com.service.dto.CollaborationDTO;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface CollaborationService {
@@ -13,4 +14,7 @@ public interface CollaborationService {
     void annuler(Long id_collaboration);
     void CompleteProvider(Long id_collaboration);
     void CompleteCustomer(Long id_collaboration);
+    List<CollaborationDTO> findAllByProvider(Long id_provider);
+    List<CollaborationDTO> getCollaborationsByProviderId(Long id_provider);
+    List<CollaborationDTO> getCollaborationsBycustomerId(Long id_customer);
 }

@@ -86,6 +86,7 @@ public class CustomerResource {
 
     @PostMapping("/balance/{id}")
     public ResponseEntity<?> saveBalance(@RequestBody BalanceDTO balanceDTO, @PathVariable long id) {
+       System.out.println("balance = " + balanceDTO.getSum());
         log.debug("REST, Request to save Balance : {} {}", balanceDTO, id);
         return new ResponseEntity<>(balanceService.save(balanceDTO, id), HttpStatus.CREATED);
     }
@@ -100,6 +101,15 @@ public class CustomerResource {
     public void terminerCollaboration(@PathVariable long id_collaboration) {
         log.debug("REST, Request to terminer Collaboration : {} ", id_collaboration);
         collaborationService.CompleteCustomer(id_collaboration);
+    }
+    @GetMapping("/collaborationss/customer/{id_customer}")
+    public List<CollaborationDTO> findAllByCustomer(@PathVariable Long id_customer){
+        log.debug("REST request to find all by provider_id: {}", id_customer);
+        return collaborationService.getCollaborationsBycustomerId(id_customer);
+    }
+    @PutMapping("/retrait/{sum}/{id}")
+    public Integer updateBalance(@PathVariable Float sum,@PathVariable Long id){
+        return balanceService.retrait(id, sum);
     }
 
 }

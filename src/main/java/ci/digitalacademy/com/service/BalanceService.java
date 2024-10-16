@@ -16,5 +16,5 @@ public interface BalanceService {
     List<BalanceDTO> findAll();
     Optional<BalanceDTO> getById(Long id);
     Optional<BalanceDTO> getBySlug(String slug);
-    void retrait(Long id,Float sum);
+    Integer retrait(Long id,Float sum);
 }

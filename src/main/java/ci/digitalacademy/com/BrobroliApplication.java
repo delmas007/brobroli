@@ -32,4 +32,5 @@ public class BrobroliApplication implements CommandLineRunner {
             roleRepository.save(role2);
         }
     }
+
 }

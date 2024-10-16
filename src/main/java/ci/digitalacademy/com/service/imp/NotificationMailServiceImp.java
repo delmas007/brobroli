@@ -38,7 +38,7 @@ public class NotificationMailServiceImp implements NotificationMailService {
                     "                <div style=\"font-size: 16px; margin: 20px 0;\">" +
                     "                    <strong>Service demandé :</strong> " + collaborationDTO.getService().getTypeService() + "<br>" +
                     "                    <strong>Description du service :</strong> " + collaborationDTO.getService().getDescription() + "<br>" +
-                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " €<br>" +
+                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " fcfa<br>" +
                     "                    <strong>Durée estimée :</strong> " + collaborationDTO.getService().getDuration() + " heures<br>" +
                     "                </div>" +
                     "                <div style=\"font-size: 16px; margin: 20px 0;\">" +
@@ -84,7 +84,7 @@ public class NotificationMailServiceImp implements NotificationMailService {
                     "                <div style=\"font-size: 16px; margin: 20px 0;\">" +
                     "                    <strong>Service :</strong> " + collaborationDTO.getService().getTypeService() + "<br>" +
                     "                    <strong>Description :</strong> " + collaborationDTO.getService().getDescription() + "<br>" +
-                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " €<br>" +
+                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " fcfa<br>" +
                     "                    <strong>Durée estimée :</strong> " + collaborationDTO.getService().getDuration() + " heures<br>" +
                     "                </div>" +
                     "                Vous pouvez maintenant organiser les détails de la collaboration directement avec le prestataire.<br>" +
@@ -125,7 +125,7 @@ public class NotificationMailServiceImp implements NotificationMailService {
                     "                <div style=\"font-size: 16px; margin: 20px 0;\">" +
                     "                    <strong>Service :</strong> " + collaborationDTO.getService().getTypeService() + "<br>" +
                     "                    <strong>Description :</strong> " + collaborationDTO.getService().getDescription() + "<br>" +
-                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " €<br>" +
+                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " fcfa<br>" +
                     "                    <strong>Durée estimée :</strong> " + collaborationDTO.getService().getDuration() + " heures<br>" +
                     "                </div>" +
                     "                Nous vous invitons à consulter d'autres prestataires disponibles pour répondre à votre besoin.<br>" +
@@ -166,7 +166,7 @@ public class NotificationMailServiceImp implements NotificationMailService {
                     "                <div style=\"font-size: 16px; margin: 20px 0;\">" +
                     "                    <strong>Service :</strong> " + collaborationDTO.getService().getTypeService() + "<br>" +
                     "                    <strong>Description :</strong> " + collaborationDTO.getService().getDescription() + "<br>" +
-                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " €<br>" +
+                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " fcfa<br>" +
                     "                    <strong>Durée estimée :</strong> " + collaborationDTO.getService().getDuration() + " heures<br>" +
                     "                </div>" +
                     "                Nous espérons que vous trouverez bientôt de nouvelles collaborations.<br>" +
@@ -207,7 +207,7 @@ public class NotificationMailServiceImp implements NotificationMailService {
                     "                <div style=\"font-size: 16px; margin: 20px 0;\">" +
                     "                    <strong>Service :</strong> " + collaborationDTO.getService().getTypeService() + "<br>" +
                     "                    <strong>Description :</strong> " + collaborationDTO.getService().getDescription() + "<br>" +
-                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " €<br>" +
+                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " fcfa<br>" +
                     "                    <strong>Durée estimée :</strong> " + collaborationDTO.getService().getDuration() + " heures<br>" +
                     "                </div>" +
                     "                Merci pour votre collaboration avec <strong>" + collaborationDTO.getCustomer().getFirstName() + " " + collaborationDTO.getCustomer().getLastName() + "</strong>.<br>" +
@@ -249,7 +249,7 @@ public class NotificationMailServiceImp implements NotificationMailService {
                     "                <div style=\"font-size: 16px; margin: 20px 0;\">" +
                     "                    <strong>Service :</strong> " + collaborationDTO.getService().getTypeService() + "<br>" +
                     "                    <strong>Description :</strong> " + collaborationDTO.getService().getDescription() + "<br>" +
-                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " €<br>" +
+                    "                    <strong>Tarif :</strong> " + collaborationDTO.getService().getPrice() + " fcfa<br>" +
                     "                    <strong>Durée estimée :</strong> " + collaborationDTO.getService().getDuration() + " heures<br>" +
                     "                </div>" +
                     "                Merci pour votre confiance et collaboration avec <strong>" + collaborationDTO.getService().getProvider().getFirstName() + " " + collaborationDTO.getService().getProvider().getLastName() + "</strong>.<br>" +

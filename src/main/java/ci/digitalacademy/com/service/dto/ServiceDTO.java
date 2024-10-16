@@ -4,7 +4,7 @@ import ci.digitalacademy.com.Views;
 import ci.digitalacademy.com.model.Collaboration;
 import ci.digitalacademy.com.model.Provider;
 import ci.digitalacademy.com.model.enume.TypeService;
-import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,7 +18,9 @@ public class ServiceDTO {
     private Float price;
     private Float duration;
     private String slug;
-    @JsonView(Views.Internal.class)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private ProviderDTO provider;
+//    @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private CollaborationDTO collaboration;
 }

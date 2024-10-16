@@ -7,6 +7,9 @@ import ci.digitalacademy.com.model.Service;
 import ci.digitalacademy.com.model.enume.CollaborationStatus;
 import ci.digitalacademy.com.model.enume.CustomerStatusService;
 import ci.digitalacademy.com.model.enume.ProviderStatusService;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Getter;
@@ -23,7 +26,11 @@ public class CollaborationDTO {
     private CollaborationStatus status;
     private LocalDate createAt;
     private LocalDate updateAt;
+//    @JsonIgnore
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private ServiceDTO service;
+//    @JsonIgnore
+//    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     private CustomerDTO customer;
     private InterimBalanceDTO interimBalance;
     private CustomerStatusService customerStatusService;
